@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        // criação da variável config
+        var config =
+        {
+            type: Phaser.AUTO, //definição do tipo
+            height: 600, //definição altura
+            width: 800, //definição largura
+            scene: // criação cena e definição preload,create e update
+            {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        };
+
+        var game = new Phaser.Game(config); // criação da variável game e colocando a variável config para funcionar
+        var passaro
+        function preload() {
+            this.load.image('space', 'assets/bg_space.png'); // criando o plano de fundo
+            this.load.spritesheet('bird', 'assets/bird-purple.png', { frameWidth: 75, frameHeight: 75 }); //criando o boneco(passaro)
+            // utilização do spritesheet para cortar a imagem bird em frameWidth e frameheight
+        }
+        function create() {
+            this.add.image(400, 300, 'space').setScale(1.2); // definindo escala e posição inicial do plano de fundo
+            passaro = this.add.sprite(100, 100, 'bird').setScale(1.3); //definindo escala e posição inicial do passaro
+            this.anims.create({key: 'fly', // definição key
+            frames: this.anims.generateFrameNumbers // escolhendo animação
+            ('bird', { start: 0, end: 7 // escolha do primeiro e último frame a ser utilzado
+            }),
+            frameRate: 10, // definição da velocidade do Frame
+            repeat: -1 // colocando para repetir infinitamente
+            });
+            passaro.anims.play('fly',true); // colocando a animação com a key para funcionar
+
+        }
+        function update() {
+            if (passaro.x === 100) 
+            { 
+                passaro.setFlip(false, false); // o pássaro não irá inverter
+                passaro.ida = true; // definindo a ida
+            }
+            if (passaro.x < 700 && passaro.ida === true) // definição das condições
+            {
+                passaro.setFlip(false, false); // o pássaro não irá inverter
+                passaro.x += 5; // quando o pássaro tiver as condições acima, ele irá andar +5 no eixo x
+            }
+
+            if (passaro.x === 700) // definindo a condição
+             { 
+                passaro.setFlip(true, false); // o pássaro irá inverter no eixo x
+                passaro.ida = false; // definindo a mudança de direção
+              
+            }
+            if (passaro.x > 100 && passaro.ida === false) // definição das condições
+             {  
+            passaro.x -= 5; // definindo a afirmação
+            
+            }
+            // EIXO Y
+            if (passaro.y === 100)  // definição da condição
+            {
+                passaro.idaY = true; // definição da idaY
+            }
+            if (passaro.y <= 620 && passaro.idaY === true) // definição da condição
+            {
+                passaro.y += 1.5; // definição da afirmação: quando o pássaro tiver as condições acima ele irá descer +1.5
+
+            }
+            if (passaro.y >= 620 ) // definição da condição
+            {
+                passaro.idaY = false; // definição da afirmação (mudança de direção)
+            }
+            if (passaro.y > 100 && passaro.idaY === false) // definição da condição
+             {
+                passaro.y -= 1.5; // definição da afirmação: quando o pássaro tiver as condições acima ele irá subir -1.5
+               
+             }
+             while( passaro.x === Phaser.Math.RND.between(50, 650))
+             { console.log ('olha o passarinho')
+            break
+            };
+
+        }
+    </script>
+</body>
+
+</html>
